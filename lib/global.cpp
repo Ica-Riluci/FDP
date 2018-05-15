@@ -1,0 +1,18 @@
+#include "global.h"
+#include <fstream>
+#include <iostream>
+
+void init(string filename) {
+  ifstream inp;
+  if (filename == "")
+    filename = "data.txt";
+  try {
+    inp.open(filename);
+  } catch (...) {}
+  if (inp.is_open()) { cout << "Data found." << endl; }
+  else {
+    cout << "Failed to find data." << endl;
+    return;
+  }
+  // effort to finding the file of data
+}

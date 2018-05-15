@@ -6,4 +6,8 @@
 
 - Creating of the project
 - Copying the pseudo-code from the slides provided by the teacher
-- [ ] Clearing the slides, manage to understand the algorithm
+- [x] Clearing the slides, manage to understand the algorithm
+
+## 2018, May 15th
+
+- [ ] Finish the Initialization

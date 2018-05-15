@@ -12,3 +12,27 @@
         delete X from L_l
     Also computes the sets RHS^+(X) for all X in L_l
 */
+
+#include <iostream>
+#include <vector>
+#include <set>
+#include <string>
+#include "global.h"
+
+using namespace std;
+
+vector<REC> table;
+
+int main(int argc, char *argv[]) {
+  // check input and start initialzation
+  if (argc > 1) {
+    if (argc == 2)
+      init(argv[1]);
+    else
+      cout << "Too many arguments." << endl;
+  }
+  else
+    init("");
+  // workout
+  return 0;
+}
