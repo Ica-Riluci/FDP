@@ -6,8 +6,12 @@
 
 using namespace std;
 
-extern vector<string> col[15];
+typedef struct rec {
+  string attr[15];
+} REC;
 
-void init(string filename);
+vector<REC>* init(string filename);
+
+void split_and_save(vector<REC> *t, string r);
 
 #endif
