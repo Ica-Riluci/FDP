@@ -10,4 +10,4 @@
 
 ## 2018, May 15th
 
-- [ ] Finish the Initialization
+- [x] Finish the Initialization

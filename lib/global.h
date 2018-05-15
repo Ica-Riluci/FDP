@@ -7,7 +7,7 @@
 using namespace std;
 
 typedef struct rec {
-  string attr[15];
+    string attr[15];
 } REC;
 
 vector<REC>* init(string filename);

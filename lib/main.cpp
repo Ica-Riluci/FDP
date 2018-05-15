@@ -23,16 +23,15 @@ using namespace std;
 vector<REC> *table;
 
 int main(int argc, char *argv[]) {
-  // check input and start initialzation
-  if (argc > 1) {
-    if (argc == 2)
-      table = init(argv[1]);
+    // check input and start initialzation
+    if (argc > 1) {
+        if (argc == 2)
+            table = init(argv[1]);
+        else
+            cout << "Too many arguments." << endl;
+    }
     else
-      cout << "Too many arguments." << endl;
-  }
-  else
-    table = init("");
-  }
-  // workout
-  return 0;
+        table = init("");
+    // workout
+    return 0;
 }
