@@ -15,4 +15,17 @@ void init(string filename) {
     return;
   }
   // effort to finding the file of data
+  string row = "";
+  int cnt = 0;
+  while (not inp.eof()) {
+    char c = inp.get();
+    if ((c == 10) || (c == 13) || (c == -1)) {
+      if (row != "") {
+        cout << row << endl; // tbc
+        row = "";
+      }
+    } else {
+      row = row + c;
+    }
+  }
 }

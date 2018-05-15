@@ -14,14 +14,11 @@
 */
 
 #include <iostream>
-#include <vector>
 #include <set>
 #include <string>
 #include "global.h"
 
 using namespace std;
-
-vector<REC> table;
 
 int main(int argc, char *argv[]) {
   // check input and start initialzation

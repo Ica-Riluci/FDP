@@ -2,12 +2,11 @@
 #define GLOBAL_H
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
-typedef struct rec {
-  string attr[15];
-} REC;
+extern vector<string> col[15];
 
 void init(string filename);
 
