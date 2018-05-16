@@ -2,7 +2,15 @@
 #define LVLCOMPUTE_H
 #include "global.h"
 
-void compute(int lvl, vector<REC> *tab);
+typedef struct rhsset {
+    int id;
+    int rhs;
+    bool operator < (const RHS r) const {
+        return id < r.id;
+    }
+} RHS;
+
+void compute(int lvl, vector<int> *tab);
 
 set<int>* compute_lvl_set(int lvl);
 #endif

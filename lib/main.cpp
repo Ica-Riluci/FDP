@@ -14,6 +14,7 @@
 */
 
 #include <iostream>
+#include <set>
 #include "global.h"
 #include "lvlcompute.h"
 
@@ -32,6 +33,7 @@ int main(int argc, char *argv[]) {
     else
         table = init("");
     // workout
-    compute(15, table);
+    set<int> *R = compute_lvl_set(15);
+    compute(table);
     return 0;
 }
