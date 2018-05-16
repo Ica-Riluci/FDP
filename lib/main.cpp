@@ -14,9 +14,8 @@
 */
 
 #include <iostream>
-#include <set>
-#include <string>
 #include "global.h"
+#include "lvlcompute.h"
 
 using namespace std;
 
@@ -33,5 +32,6 @@ int main(int argc, char *argv[]) {
     else
         table = init("");
     // workout
+    compute(15, table);
     return 0;
 }
