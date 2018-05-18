@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+const int attr_num = 4;
+
 using namespace std;
 
 typedef struct rec {

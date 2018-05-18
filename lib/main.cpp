@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <set>
+#include <bitset>
 #include "global.h"
 #include "lvlcompute.h"
 
@@ -33,7 +34,8 @@ int main(int argc, char *argv[]) {
     else
         table = init("");
     // workout
-    set<int> *R = compute_lvl_set(15);
+    // set<int> *R = compute_lvl_set(15);
     compute(table);
+    // debug
     return 0;
 }

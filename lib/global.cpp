@@ -2,6 +2,9 @@
 #include <fstream>
 #include <iostream>
 
+// designed and tested by Ica
+// for intialization
+
 vector<REC>* init(string filename) {
     vector<REC> *table;
     table = new vector<REC>;
@@ -37,7 +40,7 @@ void split_and_save(vector<REC> *t, string r) {
     string clip = r;
     string val;
     REC record;
-    for (int i = 0; i < 15; ++i) {
+    for (int i = 0; i < attr_num; ++i) {
         val = "";
         int x = clip.find_first_of(',');
         while (clip[x + 1] == ' ') {
