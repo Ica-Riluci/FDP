@@ -3,7 +3,6 @@
 #include "global.h"
 #include <set>
 
-
 typedef struct rhsset {
     int id;
     int rhs;
@@ -12,13 +11,13 @@ typedef struct rhsset {
     }
 } RHS;
 
-typedef struct partset {
-    int id;
-    int size;
-    bool operator < (const partset p) const {
-        return id < p.id;
-    }
-} PART;
+// typedef struct partset {
+    // int id;
+    // int size;
+    // bool operator < (const partset p) const {
+        // return id < p.id;
+    // }
+// } PART;
 
 typedef struct anspair {
     int lh;
@@ -39,7 +38,7 @@ int search_rhs(int id, set<RHS> *s);
 
 void compute(vector<REC> *tab);
 
-bool check_val(int can_a, int b_size, vector<REC> *tab, set<PART> *pp);
+// bool check_val(int can_a, int b_size, vector<REC> *tab, set<PART> *pp);
 
 set<int>* compute_lvl_set(int lvl);
 #endif

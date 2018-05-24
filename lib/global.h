@@ -4,12 +4,12 @@
 #include <string>
 #include <vector>
 
-const int attr_num = 4;
+const int attr_num = 15;
 
 using namespace std;
 
 typedef struct rec {
-    string attr[15];
+    string attr[attr_num];
 } REC;
 
 vector<REC>* init(string filename);
