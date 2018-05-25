@@ -5,9 +5,17 @@
 // designed and tested by Ica
 // for intialization
 
-vector<REC>* init(string filename) {
-    vector<REC> *table;
-    table = new vector<REC>;
+void dict_ins(DICT *p, string rest, int row) {
+    if (rest == "")
+        p->rows.insert(row);
+    else {
+        if (p->son[(int)rest[0]] == NULL)
+            p->son[(int)rest[0]] = new DICT;
+        dict_ins(p->son[(int)rest[0]], rest.substr(1), row);
+    }
+}
+
+void init(string filename, DICT** table) {
     ifstream inp;
     if (filename == "")
         filename = "data.txt";
@@ -17,7 +25,7 @@ vector<REC>* init(string filename) {
     if (inp.is_open()) { cout << "Data found." << endl; }
     else {
         cout << "Failed to find data." << endl;
-        return NULL;
+        return;
     }
     // effort to finding the file of data
     string row = "";
@@ -26,20 +34,19 @@ vector<REC>* init(string filename) {
         char c = inp.get();
         if ((c == 10) || (c == 13) || (c == -1)) {
             if (row != "") {
-                split_and_save(table, row);
+                split_and_save(table, row, cnt);
+                ++cnt;
                 row = "";
             }
         } else {
             row = row + c;
         }
     }
-    return table;
 }
 
-void split_and_save(vector<REC> *t, string r) {
+void split_and_save(DICT **t, string r, int row) {
     string clip = r;
     string val;
-    REC record;
     for (int i = 0; i < attr_num; ++i) {
         val = "";
         int x = clip.find_first_of(',');
@@ -50,7 +57,6 @@ void split_and_save(vector<REC> *t, string r) {
         }
         val += clip.substr(0, x);
         clip.erase(0, x + 1);
-        record.attr[i] = val;
+        dict_ins(t[i], val, row);
     }
-    (*t).push_back(record);
 }

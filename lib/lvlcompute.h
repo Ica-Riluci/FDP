@@ -15,22 +15,47 @@ typedef struct anspair {
     int lh;
     int rh;
     bool operator < (const anspair p) const {
-        for (int i = 0; i < attr_num; ++i)
-            if (((lh >> i) & 1) < ((p.lh >> i) & 1))
+        int i = 0;
+        for (; i < attr_num && (((lh >> i) & 1) == ((p.lh >> i) & 1)); ++i);
+        if (i < attr_num) {
+            if ((lh >> i) & 1) {
+                int j = i + 1;
+                for (; j < attr_num; ++j)
+                    if ((p.lh >> j) & 1 == 1)
+                        return true;
                 return false;
-            else if (((lh >> i) & 1) > ((p.lh >> i) & 1))
+            } else if ((p.lh >> i) & 1) {
+                int j = i + 1;
+                for (; j < attr_num; ++j)
+                    if ((lh >> j) & 1 == 1)
+                        return false;
                 return true;
+            }
+        }
         if (rh < p.rh)
             return true;
         return false;
     }
 } ANS;
 
+typedef struct pipair {
+    int pi_a, pi_b;
+} PPAIR;
+
 int search_rhs(int id, set<RHS> *s);
 
-void compute(vector<REC> *tab);
+void compute(DICT **tab);
+
+vector<vector<int>> cover(DICT *p);
 
 // bool check_val(int can_a, int b_size, vector<REC> *tab, set<PART> *pp);
 
 set<int>* compute_lvl_set(int lvl);
+
+vector<int> to_vector(set<int> s);
+
+vector<vector<int>> calc_part(int pia, int pib);
+
+int get_part_size(int tid);
+
 #endif

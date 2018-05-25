@@ -21,18 +21,20 @@
 
 using namespace std;
 
-vector<REC> *table;
+DICT *table[attr_num];
 
 int main(int argc, char *argv[]) {
     // check input and start initialzation
+    for (int i = 0; i < attr_num; ++i)
+        table[i] = new DICT;
     if (argc > 1) {
         if (argc == 2)
-            table = init(argv[1]);
+            init(argv[1], table);
         else
             cout << "Too many arguments." << endl;
     }
     else
-        table = init("");
+        init("", table);
     // workout
     // set<int> *R = compute_lvl_set(15);
     compute(table);
