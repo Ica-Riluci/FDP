@@ -42,8 +42,6 @@ typedef struct pipair {
     int pi_a, pi_b;
 } PPAIR;
 
-int search_rhs(int id, set<RHS> *s);
-
 void compute(DICT **tab);
 
 vector<vector<int>> cover(DICT *p);

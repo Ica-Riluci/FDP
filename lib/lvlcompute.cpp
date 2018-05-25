@@ -23,14 +23,6 @@ vector<vector<int>> *p[1 << attr_num];
     Also computes the sets RHS^+(X) for all X in L_l
 */
 
-int search_rhs(int qid, set<RHS> *s) {
-    for (set<RHS>::iterator it = s->begin(); it != s->end(); ++it) {
-        if ((*it).id == qid)
-            return (*it).rhs;
-    }
-    return -1;
-}
-
 vector<int> to_vector(set<int> s) {
     vector<int> res;
     res.clear();
@@ -167,27 +159,23 @@ void compute(DICT **dict) {
                     if (get_part_size(tid & ((1 << attr_num) - 1 - (1 << j))) == get_part_size(tid)) {
                         // cout << "   $$$validated" << endl;
                         ANS tmpans;
-                        tmpans.lh = tid & ((1 << attr_num) - 1 - (1 <<j));
+                        tmpans.lh = tid & ((1 << attr_num) - 1 - (1 << j));
                         tmpans.rh = 1 << j;
                         // cout << bitset<attr_num>(tmpans.lh) << "->" << bitset<attr_num>(tmpans.rh) << endl;
                         ans.insert(tmpans);
                         rhsp[tid] &= ((1 << attr_num) - 1 - (1 << j));
                         for (int k = 0; k < attr_num; ++k) {
                             if (((((1 << attr_num) - 1) ^ tid) >> k) & 1) {
-                                ANS canans;
-                                canans.lh = tid & ((1 << attr_num) - 1 - (1 << j)) & ((1 << attr_num) - 1 - (1 << k));
-                                canans.rh = 1 << j;
-                                if (ans.find(canans) != ans.end())
-                                    rhsp[tid] &= ((1 << attr_num) - 1 - (1 << k));
+                                rhsp[tid] &= ((1 << attr_num) - 1 - (1 << k));
                             }
                         }
                     }
                 }
             }
         }
-        if (l > 2)
-            for (set<int>::iterator it = pre_set->begin(); it != pre_set->end(); ++it)
-                delete p[(*it)];
+        // if (l > 2)
+        //     for (set<int>::iterator it = pre_set->begin(); it != pre_set->end(); ++it)
+        //         delete p[(*it)];
         delete pre_set;
         pre_set = cur_set;
     }
