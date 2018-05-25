@@ -11,14 +11,6 @@ typedef struct rhsset {
     }
 } RHS;
 
-// typedef struct partset {
-    // int id;
-    // int size;
-    // bool operator < (const partset p) const {
-        // return id < p.id;
-    // }
-// } PART;
-
 typedef struct anspair {
     int lh;
     int rh;

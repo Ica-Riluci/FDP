@@ -7,6 +7,7 @@ using namespace std;
 
 int part_size[1 << attr_num];
 int rhsp[1 << attr_num];
+vector<set<int>> p[1 << attr_num];
 
 /*Initialzation
   Here is the pesudo-code
@@ -33,82 +34,112 @@ int search_rhs(int qid, set<RHS> *s) {
 
 void compute(vector<REC> *table) {
     set<ANS> ans;
-    // set<RHS> *pre_lvl = new set<RHS>;
-    // set<PART> *pre_part = new set<PART>;
     set<int> *pre_set = new set<int>;
-    // set<RHS> *cur_lvl;
-    // set<PART> *cur_part;
     set<int> *cur_set;
-    set<vector<string>> *cnt = new set<vector<string>>;
     for (int i = 0; i < (1 << attr_num); ++i) {
         part_size[i] = -1;
         rhsp[i] = -1;
     }
-    //calc the RHS+ of lvl_1, tested
     cout << "Initializing the computation..." << endl;
     for (int i = 0; i < attr_num; ++i) {
-        // RHS tmp;
-        // tmp.id = 1 << i;
-        // tmp.rhs = 1 << i;
-        // pre_lvl->insert(tmp);
         rhsp[1 << i] = (1 << attr_num) - 1;
         pre_set->insert((1 << attr_num) - 1);
         for (vector<REC>::size_type j = 0; j != (*table).size(); ++j) {
-            vector<string> item;
-            item.push_back((*table)[j].attr[i]);
-            cnt->insert(item);
+            // vector<string> item;
+            // item.push_back((*table)[j].attr[i]);
+            // cnt->insert(item);
+            if (p[1 << i].size() == 0) {
+                set<int> new_p;
+                new_p.insert(j);
+                p[1 << i].push_back(new_p);
+            } else {
+                vector<set<int>>::iterator k = p[1 << i].begin();
+                for (; k != p[1 << i].end(); ++k) {
+                    if ((*table)[*((*k).begin())].attr[i] == (*table)[j].attr[i]) {
+                        (*k).insert(j);
+                        break;
+                    }
+                }
+                if (k == p[1 << i].end()) {
+                    set<int> new_p;
+                    new_p.insert(j);
+                    p[1 << i].push_back(new_p);
+                }
+            }
         }
-        // PART tmp_p;
-        // tmp_p.id = 1 << i;
-        // tmp_p.size = cnt->size();
-        // pre_part->insert(tmp_p);
-        part_size[1 << i] = cnt->size();
-        cnt->clear();
+        part_size[1 << i] = p[1 << i].size();
     }
-    //calc the RHS+ recursively
     for (int l = 2; l <= attr_num; ++l) {
         cout << "level " << l << " >>>>>>>>>>>>>>>>>>>>" << endl;
         cout << "compute level candidates" << endl;
         cur_set = compute_lvl_set(l);
-        // cur_part = new set<PART>;
-        // cur_lvl = new set<RHS>;
+        int pT[1000000];
+        for (int i = 0; i < 1000000; ++i)
+            pT[i] = -1;
         for (set<int>::iterator it = cur_set->begin(); it != cur_set->end(); ++it) {
             int tid = (*it);
+            int pia = 0, pib;
+            cout << "For " << bitset<attr_num>(tid) << ":" << endl;
+            while (pia < attr_num) {
+                if ((tid >> pia) & 1)
+                    if (p[tid - (1 << pia)].size() > 0)
+                        break;
+                ++pia;
+            }
+            if (pia == attr_num)
+                continue;
+            pib = pia + 1;
+            while (pib < attr_num) {
+                if ((tid >> pib) & 1)
+                    if (p[tid - (1 << pib)].size() > 0)
+                        break;
+                ++pib;
+            }
+            if (pib == attr_num)
+                continue;
+            pia = tid - (1 << pia);
+            pib = tid - (1 << pib);
+            // cout << "Pi_a : " << bitset<attr_num>(pia) << " & Pi_b : " << bitset<attr_num>(pib) << endl;
+            // cout << "Partition of Pi_a:" << endl;
+            // cout << "{";
+            // for (vector<set<int>>::iterator j = p[pia].begin(); j != p[pia].end(); ++j) {
+            //     cout << "{";
+            //     for (set<int>::iterator k = (*j).begin(); k != (*j).end(); ++k) {
+            //         cout << (*k) << ',';
+            //     }
+            //     cout << "}";
+            // }
+            // cout << "}" << endl;
+            set<int> pS[p[pia].size()];
+            for (vector<set<int>>::size_type j = 0; j < p[pia].size(); ++j)
+                for (set<int>::iterator k = p[pia][j].begin(); k != p[pia][j].end(); ++k)
+                    pT[(*k)] = j;
+            for (vector<set<int>>::size_type j = 0; j < p[pib].size(); ++j) {
+                for (set<int>::iterator k = p[pib][j].begin(); k != p[pib][j].end(); ++k)
+                    if (pT[(*k)] != -1)
+                        pS[pT[(*k)]].insert((*k));
+                for (set<int>::iterator k = p[pib][j].begin(); k != p[pib][j].end(); ++k) {
+                    if (pS[pT[(*k)]].size() >= 2)
+                        p[tid].push_back(pS[pT[(*k)]]);
+                    pS[pT[(*k)]].clear();
+                }
+            }
+            for (int j = 0; j < 1000000; ++j)
+                pT[j] = -1;
+            part_size[tid] = p[tid].size();
+            cout << "Partition size of " << bitset<attr_num>(tid) << ": " << part_size[tid] << endl;
+            //calc pi = pia*pib
             rhsp[tid] = (1 << attr_num) - 1;
-            // RHS tmp;
-            // tmp.id = *it;
-            // tmp.rhs = (1 << attr_num) - 1;
-            // cout << "for <" << bitset<attr_num>(tid) << ">" << endl;
             for (int j = 0; j < attr_num; ++j) {
                 if ((tid >> j) & 1) {
                     int sonid = tid & ((1 << attr_num) - 1 - (1 << j));
-                    // cout << "   rhc:" << sonid << endl;
-                    // cout << "   rhsp of rhc:" << rhsp[sonid] << endl;
                     if (rhsp[sonid] != -1)
                         rhsp[tid] &= rhsp[sonid];
                 }
             }
-            // cout << "   compute RHS+" << endl;
-            // (*)
             int candidates = tid & rhsp[tid];
-            // cout << "   RHS+ candidates = " << candidates << endl;
-            // PART new_part;
-            // new_part.id = tmp.id;
-            for (vector<REC>::size_type z = 0; z != table->size(); ++z) {
-                vector<string> ntmp;
-                for (int y = 0; y < attr_num; ++y)
-                    if ((tid >> y) & 1)
-                        ntmp.push_back((*table)[z].attr[y]);
-                cnt->insert(ntmp);
-            }
-            // new_part.size = cnt->size();
-            // cur_part->insert(new_part);
-            part_size[tid] = cnt->size();
-            cnt->clear();
             for (int j = 0; j < attr_num; ++j) {
                 if ((candidates >> j) & 1) {
-                    // cout << "   validate <" << bitset<attr_num>(tid) << "," << bitset<attr_num>(1 << j) << ">" << endl;
-                    // cout << "   checking " << bitset<attr_num>(tid & ((1 << attr_num) - 1 - (1 << j))) << " and " << bitset<attr_num>(tid) << endl;
                     if (part_size[tid & ((1 << attr_num) - 1 - (1 << j))] == part_size[tid]) {
                         cout << "   $$$validated" << endl;
                         ANS tmpans;
@@ -116,7 +147,6 @@ void compute(vector<REC> *table) {
                         tmpans.rh = 1 << j;
                         cout << bitset<attr_num>(tmpans.lh) << "->" << bitset<attr_num>(tmpans.rh) << endl;
                         ans.insert(tmpans);
-                        // check_val and print_out need extra work
                         rhsp[tid] &= ((1 << attr_num) - 1 - (1 << j));
                         for (int k = 0; k < attr_num; ++k) {
                             if (((((1 << attr_num) - 1) ^ tid) >> k) & 1) {
@@ -130,16 +160,11 @@ void compute(vector<REC> *table) {
                     }
                 }
             }
-            // cout << "   update level candidates" << endl;
             if (rhsp[tid] == 0)
                 cur_set->erase(tid);
         }
-        // delete pre_lvl;
         delete pre_set;
-        // delete pre_part;
-        // pre_lvl = cur_lvl;
         pre_set = cur_set;
-        // pre_part = cur_part;
     }
     cout << "Analysis finished." << endl;
     ofstream outp;
@@ -158,15 +183,6 @@ void compute(vector<REC> *table) {
     outp.close();
 }
 
-// bool check_val(int can_a, int b_size, vector<REC> *tab, set<PART> *pp) {
-    // for (set<PART>::iterator it = pp->begin(); it != pp->end(); ++it)
-        // if ((*it).id == can_a) {
-            // cout << "   partition size of " << bitset<attr_num>(can_a) << ": " << (*it).size << ' ' << b_size << endl;
-            // if ((*it).size == b_size)
-                // return true;
-        // }
-    // return false;
-// }
 
 // designed by GML, tested by Ica
 // intended to work out the combination of attributes on each level

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-const int attr_num = 15;
+const int attr_num = 4;
 
 using namespace std;
 
