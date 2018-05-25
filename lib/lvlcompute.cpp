@@ -79,7 +79,7 @@ void compute(vector<REC> *table) {
         for (set<int>::iterator it = cur_set->begin(); it != cur_set->end(); ++it) {
             int tid = (*it);
             int pia = 0, pib;
-            cout << "For " << bitset<attr_num>(tid) << ":" << endl;
+            // cout << "For " << bitset<attr_num>(tid) << ":" << endl;
             while (pia < attr_num) {
                 if ((tid >> pia) & 1)
                     if (p[tid - (1 << pia)].size() > 0)
@@ -110,16 +110,30 @@ void compute(vector<REC> *table) {
             //     cout << "}";
             // }
             // cout << "}" << endl;
+            // cout << "Partition of Pi_b:" << endl;
+            // cout << "{";
+            // for (vector<set<int>>::iterator j = p[pib].begin(); j != p[pib].end(); ++j) {
+            //     cout << "{";
+            //     for (set<int>::iterator k = (*j).begin(); k != (*j).end(); ++k) {
+            //         cout << (*k) << ',';
+            //     }
+            //     cout << "}";
+            // }
+            // cout << "}" << endl;
             set<int> pS[p[pia].size()];
             for (vector<set<int>>::size_type j = 0; j < p[pia].size(); ++j)
-                for (set<int>::iterator k = p[pia][j].begin(); k != p[pia][j].end(); ++k)
+                for (set<int>::iterator k = p[pia][j].begin(); k != p[pia][j].end(); ++k) {
+                    // cout << "T[" << (*k) << "]=" << j << endl;
                     pT[(*k)] = j;
+                }
             for (vector<set<int>>::size_type j = 0; j < p[pib].size(); ++j) {
-                for (set<int>::iterator k = p[pib][j].begin(); k != p[pib][j].end(); ++k)
+                for (set<int>::iterator k = p[pib][j].begin(); k != p[pib][j].end(); ++k) {
+                    // cout << "T[" << (*k) << "]=" << pT[(*k)] << endl;
                     if (pT[(*k)] != -1)
                         pS[pT[(*k)]].insert((*k));
+                }
                 for (set<int>::iterator k = p[pib][j].begin(); k != p[pib][j].end(); ++k) {
-                    if (pS[pT[(*k)]].size() >= 2)
+                    if (pS[pT[(*k)]].size() >= 1)
                         p[tid].push_back(pS[pT[(*k)]]);
                     pS[pT[(*k)]].clear();
                 }
@@ -127,7 +141,7 @@ void compute(vector<REC> *table) {
             for (int j = 0; j < 1000000; ++j)
                 pT[j] = -1;
             part_size[tid] = p[tid].size();
-            cout << "Partition size of " << bitset<attr_num>(tid) << ": " << part_size[tid] << endl;
+            // cout << "Partition size of " << bitset<attr_num>(tid) << ": " << part_size[tid] << endl;
             //calc pi = pia*pib
             rhsp[tid] = (1 << attr_num) - 1;
             for (int j = 0; j < attr_num; ++j) {
